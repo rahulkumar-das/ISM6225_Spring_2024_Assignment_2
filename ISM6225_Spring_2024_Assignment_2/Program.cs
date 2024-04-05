@@ -6,6 +6,7 @@ WRITE YOUR CODE IN THE RESPECTIVE QUESTION FUNCTION BLOCK
 
 */
 
+using System.Linq;
 using System.Text;
 
 namespace ISM6225_Spring_2024_Assignment_2
@@ -36,7 +37,7 @@ namespace ISM6225_Spring_2024_Assignment_2
 
             //Question 4:
             Console.WriteLine("Question 4:");
-            int[] nums4 = { 1, 1, 0, 1, 1, 1 };
+            int[] nums4 = { 1, 0, 1, 1, 0, 1 };
             int maxOnes = FindMaxConsecutiveOnes(nums4);
             Console.WriteLine(maxOnes);
 
@@ -48,13 +49,13 @@ namespace ISM6225_Spring_2024_Assignment_2
 
             //Question 6:
             Console.WriteLine("Question 6:");
-            int[] nums5 = { 3,6,9,1 };
+            int[] nums5 = { 3, 6, 9, 1 };
             int maxGap = MaximumGap(nums5);
             Console.WriteLine(maxGap);
 
             //Question 7:
             Console.WriteLine("Question 7:");
-            int[] nums6 = { 2,1,2 };
+            int[] nums6 = { 1, 2, 1, 10 };
             int largestPerimeterResult = LargestPerimeter(nums6);
             Console.WriteLine(largestPerimeterResult);
 
@@ -100,7 +101,19 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
-                return 0;
+
+                HashSet<int> hs = new HashSet<int>(); // using HashSet to remove duplicates
+
+                // adding values from array to hashset
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    hs.Add(nums[i]);
+                }
+
+                nums = hs.ToArray();
+
+                int k = hs.Count; // getting the count of unique elements
+                return k;
             }
             catch (Exception)
             {
@@ -135,7 +148,28 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
-                return new List<int>();
+                List<int> result = new List<int>();
+
+                //adding all the elements except 0 to the result list
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    if (nums[i] != 0)
+                    {
+                        result.Add(nums[i]);
+                    }
+                }
+
+                //counting the number of 0's in the array
+                int count = nums.Length - result.Count;
+
+                //adding 0's to the result list
+                for (int i = 0; i < count; i++)
+                {
+                    result.Add(0);
+                }
+
+
+                return result;
             }
             catch (Exception)
             {
@@ -186,7 +220,41 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
-                return new List<IList<int>>();
+
+                List<IList<int>> result = new List<IList<int>>();
+                if (nums.Length < 3) return result;
+
+                Array.Sort(nums); // Sort the input array
+
+                for (int i = 0; i < nums.Length - 2; i++)
+                {
+                    if (i > 0 && nums[i] == nums[i - 1]) continue; // Skip duplicates
+
+                    int left = i + 1, right = nums.Length - 1;
+
+                    while (left < right)
+                    {
+                        int sum = nums[i] + nums[left] + nums[right];
+
+                        if (sum == 0)
+                        {
+                            result.Add(new List<int> { nums[i], nums[left], nums[right] });
+
+                            // Skip duplicates
+                            while (left < right && nums[left] == nums[left + 1]) left++;
+                            while (left < right && nums[right] == nums[right - 1]) right--;
+
+                            left++;
+                            right--;
+                        }
+                        else if (sum < 0) left++;
+                        else right--;
+                    }
+                }
+
+                return result;
+
+                //return new List<IList<int>>();
             }
             catch (Exception)
             {
@@ -221,7 +289,28 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                int count = 0;
+                int maxCount = 0;
+
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    if (nums[i] == 1)
+                    {
+                        count = count + 1;
+                        if (count > maxCount)
+                        {
+                            maxCount = count;
+                        }
+                    }
+                    else
+                    {
+                        count = 0;
+                    }
+
+                }
+
+
+                return maxCount;
             }
             catch (Exception)
             {
@@ -256,8 +345,26 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                int decimalNum = 0;
+                int power = 0;
+
+                while (binary > 0)
+                {
+                    int digit = binary % 10; // extracting the last digit of the binary number
+                    int powerValue = 1; // initializing the powervalue to 1 because 2^0 = 1
+
+                    // this loop is used to calculate the power of 2
+                    for (int i = 0; i < power; i++)
+                    {
+                        powerValue = powerValue * 2;
+                    }
+
+                    decimalNum = decimalNum + digit * powerValue; // multiplying the binary digit with the power of 2 and adding it to the decimal number
+                    binary = binary / 10; // getting rid of the rightmost digit
+                    power++; // incrementing the power value as we move towards the left
+
+                }
+                return decimalNum;
             }
             catch (Exception)
             {
@@ -295,7 +402,26 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                Array.Sort(nums);
+                int differece = 0;
+                int maxDifference = 0;
+                if (nums.Length < 2)
+                {
+                    return 0;
+                }
+                else
+                {
+                    for (int i = 0; i < nums.Length - 1; i++)
+                    {
+                        differece = nums[i + 1] - nums[i];
+                        if (differece > maxDifference)
+                        {
+                            maxDifference = differece;
+                            differece = 0;
+                        }
+                    }
+                }
+                return maxDifference;
             }
             catch (Exception)
             {
@@ -335,7 +461,22 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
-                return 0;
+
+                Array.Sort(nums); // sorting the array in ascending order
+                Array.Reverse(nums); // reversing the array to get the largest elements first
+                int perimeter = 0;
+
+                //iterating nums.Length -2 times so that we can have 3 elements at a time
+                for (int i = 0; i < nums.Length - 2; i++)
+                {
+                    if (nums[i + 2] + nums[i + 1] > nums[i])
+                    {
+                        perimeter = nums[i] + nums[i + 1] + nums[i + 2];
+                    }
+
+                }
+
+                return perimeter;
             }
             catch (Exception)
             {
@@ -389,7 +530,11 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
-                return "";
+                while (s.Contains(part)) // checking if the part is present in the string
+                    s = s.Replace(part, ""); // replacing the part with empty string
+
+
+                return s;
             }
             catch (Exception)
             {
