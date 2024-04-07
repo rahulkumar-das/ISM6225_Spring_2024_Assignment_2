@@ -221,34 +221,45 @@ namespace ISM6225_Spring_2024_Assignment_2
             {
                 // Write your code here and you can modify the return value according to the requirements
 
+                // Initialize an empty list to store the results
                 List<IList<int>> result = new List<IList<int>>();
-                if (nums.Length < 3) return result;
 
-                Array.Sort(nums); // Sort the input array
+                // If the length of the input array is less than 3, return an empty result
+                if (nums.Length < 3) 
+                    return result;
 
+                // Sort the input array in ascending order
+                Array.Sort(nums);
+
+                // Iterate through the array until length-2 so that there are always 3 elements to consider
                 for (int i = 0; i < nums.Length - 2; i++)
                 {
-                    if (i > 0 && nums[i] == nums[i - 1]) continue; // Skip duplicates
+                    // Skip duplicates
+                    if (i > 0 && nums[i] == nums[i - 1]) continue;
 
+                    // Set the pointers for the leftmost and rightmost elements
                     int left = i + 1, right = nums.Length - 1;
 
+                    // Perform two-pointer approach to find triplets that sum to zero
                     while (left < right)
                     {
                         int sum = nums[i] + nums[left] + nums[right];
 
                         if (sum == 0)
                         {
+                            // If sum is zero, add the triplet to the result list
                             result.Add(new List<int> { nums[i], nums[left], nums[right] });
 
                             // Skip duplicates
                             while (left < right && nums[left] == nums[left + 1]) left++;
                             while (left < right && nums[right] == nums[right - 1]) right--;
 
+                            // Move both pointers towards each other
                             left++;
                             right--;
                         }
-                        else if (sum < 0) left++;
-                        else right--;
+                        else if (sum < 0) left++; // If sum is less than zero, move left pointer to the right
+                        else right--; // If sum is greater than zero, move right pointer to the left
                     }
                 }
 
@@ -289,11 +300,16 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
+                
+                //initialize two variables count and maxCount to store the count of 1's and maximum count of 1's
                 int count = 0;
                 int maxCount = 0;
 
+
                 for (int i = 0; i < nums.Length; i++)
                 {
+                    //checking if the element is 1 and if its true increment the count and check if the count is greater than maxCount
+                    //if its not true then set the count to 0 since we need to find the maximum consecutive 1's
                     if (nums[i] == 1)
                     {
                         count = count + 1;
@@ -402,15 +418,22 @@ namespace ISM6225_Spring_2024_Assignment_2
             try
             {
                 // Write your code here and you can modify the return value according to the requirements
+               
+                //sorting the array
                 Array.Sort(nums);
+
+                //initialize difference and maxDifference to store the difference between the elements and maximum difference
                 int differece = 0;
                 int maxDifference = 0;
+                
+                //checking if the array has less than 2 elements
                 if (nums.Length < 2)
                 {
                     return 0;
                 }
                 else
                 {
+                    // iterating through the array to find difference between elements stored in i+1 and i. Then comparing it to maxDifference and updating maxDifference if difference is greater.
                     for (int i = 0; i < nums.Length - 1; i++)
                     {
                         differece = nums[i + 1] - nums[i];
